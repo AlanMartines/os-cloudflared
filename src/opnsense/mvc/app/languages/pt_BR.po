@@ -70,3 +70,18 @@ msgstr "Aplicar"
 
 msgid "Install/Update Binary"
 msgstr "Instalar/Atualizar Binário"
+
+msgid "Start"
+msgstr "Iniciar"
+
+msgid "Stop"
+msgstr "Parar"
+
+msgid "Restart"
+msgstr "Reiniciar"
+
+msgid "Running"
+msgstr "Executando"
+
+msgid "Stopped"
+msgstr "Parado"
