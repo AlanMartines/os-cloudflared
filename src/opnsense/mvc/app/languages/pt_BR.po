@@ -1,0 +1,60 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: os-cloudflared\n"
+"Language: pt_BR\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Menu & ACL
+msgid "Cloudflare Tunnel"
+msgstr "Cloudflare Tunnel"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Allow access to Cloudflare Tunnel settings"
+msgstr "Permitir acesso às configurações do Cloudflare Tunnel"
+
+msgid "Allow access to Cloudflare Tunnel service status/control"
+msgstr "Permitir acesso ao status/controle do serviço Cloudflare Tunnel"
+
+# General Form
+msgid "General Settings"
+msgstr "Configurações Gerais"
+
+msgid "Enable"
+msgstr "Habilitar"
+
+msgid "Tunnel Token"
+msgstr "Token do Túnel"
+
+msgid "Disable PMTU Discovery"
+msgstr "Desativar Descoberta de PMTU"
+
+msgid "Max Socket Buffer (kern.ipc.maxsockbuf)"
+msgstr "Buffer Máximo de Socket (kern.ipc.maxsockbuf)"
+
+msgid "UDP Recv Space (net.inet.udp.recvspace)"
+msgstr "Espaço de Recebimento UDP (net.inet.udp.recvspace)"
+
+msgid "Enable Cloudflare Tunnel"
+msgstr "Habilitar Cloudflare Tunnel"
+
+msgid "The token for your Cloudflare Tunnel."
+msgstr "O token para o seu Cloudflare Tunnel."
+
+msgid "Disable PMTU discovery for QUIC. Recommended on FreeBSD/OPNsense."
+msgstr "Desativar a descoberta de PMTU para QUIC. Recomendado no FreeBSD/OPNsense."
+
+msgid "Recommended value for QUIC performance. Default is 16777216."
+msgstr "Valor recomendado para desempenho do QUIC. O padrão é 16777216."
+
+msgid "Recommended value for QUIC performance. Default is 8388608."
+msgstr "Valor recomendado para desempenho do QUIC. O padrão é 8388608."
+
+# UI Buttons
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Install/Update Binary"
+msgstr "Instalar/Atualizar Binário"
