@@ -1,5 +1,5 @@
 {#
- # Copyright (C) 2026 AI
+ # Copyright (C) 2026 Alan Martines <alancpmartines@hotmail.com>
  # All rights reserved.
  #}
 
