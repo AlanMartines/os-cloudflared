@@ -2,14 +2,14 @@
 
 Este plugin permite a integração nativa do **Cloudflare Tunnel (cloudflared)** no OPNsense, permitindo que você exponha serviços internos para a internet de forma segura, sem a necessidade de abrir portas no seu firewall ou lidar com IPs dinâmicos.
 
-O plugin utiliza o fork comunitário do **kjake**, que fornece binários otimizados do `cloudflared` para **FreeBSD/OPNsense**.
+O plugin automatiza o **"Method 1: Token-based Setup"** recomendado pela Cloudflare e pela comunidade.
 
 ## 🚀 Funcionalidades
 
 - **Configuração via Interface (MVC):** Gerenciamento completo através do menu padrão do OPNsense.
-- **Autenticação por Token:** Suporte simplificado para túneis gerenciados via painel Cloudflare Zero Trust.
-- **Instalador de Binário Integrado:** Botão na interface para baixar/atualizar a versão mais recente do `cloudflared` compatível com FreeBSD.
-- **Otimização para QUIC:** Aplica automaticamente os ajustes de `sysctl` (`kern.ipc.maxsockbuf` e `net.inet.udp.recvspace`) recomendados pela Cloudflare para melhor performance em sistemas BSD.
+- **Autenticação por Token:** Suporte para túneis gerenciados via painel Cloudflare Zero Trust (Token-based).
+- **Instalador de Binário Integrado:** Botão na interface para baixar/atualizar a versão mais recente do `cloudflared` (fork kjake para FreeBSD).
+- **Otimização para QUIC:** Aplica automaticamente os ajustes de `sysctl` (`kern.ipc.maxsockbuf` e `net.inet.udp.recvspace`) recomendados pela Cloudflare.
 - **Integração com o Sistema:** Gerenciado como um serviço padrão (RC script), permitindo iniciar, parar e monitorar o status.
 
 ## 🛠️ Instalação
@@ -20,7 +20,6 @@ Para compilar e instalar plugins no OPNsense, você precisa da infraestrutura de
 ```bash
 opnsense-code plugins
 ```
-*Isso criará o diretório `/usr/plugins` com todos os arquivos necessários para o `make` funcionar.*
 
 ### 2. Instalação para Desenvolvimento (Manual)
 Este método é ideal para testar alterações rapidamente no código.
@@ -57,16 +56,10 @@ make package
 ```
 O arquivo será gerado em `/usr/ports/packages/All/os-cloudflared-*.txz`.
 
-#### Instalando o pacote:
-Copie o arquivo `.txz` para o OPNsense de destino e instale com:
-```bash
-pkg add os-cloudflared-0.1.0.txz
-```
-
 ## 📖 Como Usar
 
 1.  **Acesse a Interface:** No menu lateral do OPNsense, vá para **Serviços -> Cloudflare Tunnel -> Configurações**.
-2.  **Baixe o Binário:** Clique no botão **"Install/Update Binary"** para realizar o download automático da versão correta para o seu sistema.
+2.  **Baixe o Binário:** Clique no botão **"Install/Update Binary"** para realizar o download automático.
 3.  **Configure o Token:**
     - Vá ao painel [Cloudflare Zero Trust](https://one.dash.cloudflare.com/).
     - Crie um novo Tunnel (ou selecione um existente).
@@ -79,11 +72,16 @@ pkg add os-cloudflared-0.1.0.txz
 
 ## ⚙️ Ajustes de Performance
 
-O plugin configura os seguintes parâmetros de kernel para evitar erros de buffer no protocolo QUIC:
+O plugin configura automaticamente os seguintes parâmetros de kernel para evitar erros de buffer no protocolo QUIC:
 - `kern.ipc.maxsockbuf`: `16777216`
 - `net.inet.udp.recvspace`: `8388608`
 
-Estes valores são aplicados automaticamente ao clicar em "Apply".
+## ❓ Solução de Problemas
+
+Se o menu não aparecer ou ocorrer erro de "form xml missing":
+1.  Verifique se o arquivo existe: `ls /usr/local/opnsense/mvc/app/models/OPNsense/Cloudflared/forms/general.xml`
+2.  Se faltar, copie manualmente: `cp -R /usr/plugins/net/cloudflared/src/opnsense/mvc/app/models/OPNsense/Cloudflared/forms /usr/local/opnsense/mvc/app/models/OPNsense/Cloudflared/`
+3.  Limpe o cache: `rm -rf /usr/local/opnsense/mvc/app/cache/*` e reinicie: `service configd restart`.
 
 ## 📄 Licença
 
@@ -93,10 +91,9 @@ Este projeto segue a mesma licença do OPNsense (BSD 2-Clause "Simplified").
 
 - Baseado no guia de instalação de [hannoeru.me](https://hannoeru.me/posts/install-cloudflared-opnsense).
 - Binários fornecidos pelo fork de [kjake/cloudflared](https://github.com/kjake/cloudflared).
-- Estrutura MVC baseada no exemplo [HelloWorld](https://docs.opnsense.org/development/examples/helloworld.html) da documentação oficial do OPNsense.
 
 ---
 
 ## ⚠️ Status do Projeto
 
-Este projeto está em **desenvolvimento ativo**. Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Teste com cautela em ambientes de produção e não hesite em reportar bugs ou sugerir melhorias.
+Este projeto está em **desenvolvimento ativo**. Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Teste com cautela em ambientes de produção.
