@@ -76,13 +76,6 @@ O plugin configura automaticamente os seguintes parâmetros de kernel para evita
 - `kern.ipc.maxsockbuf`: `16777216`
 - `net.inet.udp.recvspace`: `8388608`
 
-## ❓ Solução de Problemas
-
-Se o menu não aparecer ou ocorrer erro de "form xml missing":
-1.  Verifique se o arquivo existe: `ls /usr/local/opnsense/mvc/app/models/OPNsense/Cloudflared/forms/general.xml`
-2.  Se faltar, copie manualmente: `cp -R /usr/plugins/net/cloudflared/src/opnsense/mvc/app/models/OPNsense/Cloudflared/forms /usr/local/opnsense/mvc/app/models/OPNsense/Cloudflared/`
-3.  Limpe o cache: `rm -rf /usr/local/opnsense/mvc/app/cache/*` e reinicie: `service configd restart`.
-
 ## 📄 Licença
 
 Este projeto segue a mesma licença do OPNsense (BSD 2-Clause "Simplified").
