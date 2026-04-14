@@ -1,10 +1,10 @@
 <acl>
-    <page-services-cloudflared>
-        <name>WebCfg - Services: Cloudflare Tunnel</name>
+    <page-vpn-cloudflared>
+        <name>WebCfg - VPN: Cloudflare Tunnel</name>
         <description>Allow access to the Cloudflare Tunnel module</description>
         <patterns>
             <pattern>ui/cloudflared/*</pattern>
             <pattern>api/cloudflared/*</pattern>
         </patterns>
-    </page-services-cloudflared>
+    </page-vpn-cloudflared>
 </acl>
