@@ -14,13 +14,19 @@ O plugin utiliza o fork comunitário do **kjake**, que fornece binários otimiza
 
 ## 🛠️ Instalação
 
-Existem duas formas principais de instalar este plugin no seu OPNsense:
+### 1. Preparação do Ambiente (Necessário uma única vez)
+Para compilar e instalar plugins no OPNsense, você precisa da infraestrutura de build (`Mk`) do repositório oficial de plugins. No shell do seu OPNsense, execute:
 
-### 1. Instalação para Desenvolvimento (Manual)
+```bash
+opnsense-code plugins
+```
+*Isso criará o diretório `/usr/plugins` com todos os arquivos necessários para o `make` funcionar.*
+
+### 2. Instalação para Desenvolvimento (Manual)
 Este método é ideal para testar alterações rapidamente no código.
 
 1.  Acesse o shell do seu OPNsense (via SSH ou console).
-2.  Navegue até o diretório de plugins (crie a categoria `net` se não existir):
+2.  Navegue até o diretório de plugins de rede:
     ```bash
     mkdir -p /usr/plugins/net/
     cd /usr/plugins/net/
@@ -29,7 +35,7 @@ Este método é ideal para testar alterações rapidamente no código.
     ```bash
     git clone https://github.com/AlanMartines/os-cloudflared cloudflared
     ```
-4.  Instale o plugin diretamente no sistema:
+4.  Instale o plugin no sistema:
     ```bash
     cd cloudflared
     make install
@@ -39,8 +45,8 @@ Este método é ideal para testar alterações rapidamente no código.
     configctl service configd restart
     ```
 
-### 2. Instalação via Pacote (.txz)
-Este é o método recomendado para distribuir o plugin para outros sistemas OPNsense.
+### 3. Instalação via Pacote (.txz)
+Recomendado para distribuir o plugin para outros sistemas OPNsense.
 
 #### Gerando o pacote:
 No seu ambiente de desenvolvimento OPNsense, execute:
