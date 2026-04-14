@@ -40,9 +40,10 @@ Este método é ideal para testar alterações rapidamente no código.
     cd cloudflared
     make install
     ```
-5.  Recarregue as configurações do backend:
+5.  Recarregue as configurações do backend e limpe o cache:
     ```bash
     service configd restart
+    rm -rf /usr/local/opnsense/mvc/app/cache/*
     ```
 
 ### 3. Instalação via Pacote (.txz)
@@ -93,3 +94,9 @@ Este projeto segue a mesma licença do OPNsense (BSD 2-Clause "Simplified").
 - Baseado no guia de instalação de [hannoeru.me](https://hannoeru.me/posts/install-cloudflared-opnsense).
 - Binários fornecidos pelo fork de [kjake/cloudflared](https://github.com/kjake/cloudflared).
 - Estrutura MVC baseada no exemplo [HelloWorld](https://docs.opnsense.org/development/examples/helloworld.html) da documentação oficial do OPNsense.
+
+---
+
+## ⚠️ Status do Projeto
+
+Este projeto está em **desenvolvimento ativo**. Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Teste com cautela em ambientes de produção e não hesite em reportar bugs ou sugerir melhorias.
