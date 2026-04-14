@@ -42,7 +42,7 @@ Este método é ideal para testar alterações rapidamente no código.
     ```
 5.  Recarregue as configurações do backend:
     ```bash
-    configctl service configd restart
+    service configd restart
     ```
 
 ### 3. Instalação via Pacote (.txz)
