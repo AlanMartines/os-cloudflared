@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# $FreeBSD$
+#
+# PROVIDE: cloudflared
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf.d/cloudflared to enable cloudflared:
+#
+# cloudflared_enable (bool):	Set to "NO" by default.
+#				Set it to "YES" to enable cloudflared.
+# cloudflared_mode (string):	Set to "tunnel run" by default.
+
+. /etc/rc.subr
+
+name="cloudflared"
+rcvar="cloudflared_enable"
+
+load_rc_config $name
+
+: ${cloudflared_enable:="NO"}
+: ${cloudflared_mode:="tunnel run"}
+
+command="/usr/local/bin/cloudflared"
+pidfile="/var/run/${name}.pid"
+procname="/usr/local/bin/cloudflared"
+
+# We use daemon to manage the background process and PID
+command_args="--pidfile ${pidfile} ${cloudflared_mode}"
+command="/usr/sbin/daemon"
+
+# Overriding the command to use daemon
+actual_command="/usr/local/bin/cloudflared"
+command_args="-c -f -p ${pidfile} ${actual_command} ${cloudflared_mode}"
+
+run_rc_command "$1"

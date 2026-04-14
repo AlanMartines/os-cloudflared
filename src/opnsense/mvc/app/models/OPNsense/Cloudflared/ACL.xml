@@ -1,0 +1,19 @@
+<acl>
+    <OPNsense>
+        <Cloudflared>
+            <Settings>
+                <description>Allow access to Cloudflare Tunnel settings</description>
+                <patterns>
+                    <pattern>ui/cloudflared*</pattern>
+                    <pattern>api/cloudflared/settings/*</pattern>
+                </patterns>
+            </Settings>
+            <Service>
+                <description>Allow access to Cloudflare Tunnel service status/control</description>
+                <patterns>
+                    <pattern>api/cloudflared/service/*</pattern>
+                </patterns>
+            </Service>
+        </Cloudflared>
+    </OPNsense>
+</acl>

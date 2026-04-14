@@ -1,0 +1,11 @@
+<menu>
+    <Services>
+        <Cloudflared type="menu">
+            <label>Cloudflare Tunnel</label>
+            <CloudflaredSettings type="item">
+                <label>Settings</label>
+                <url>/ui/cloudflared</url>
+            </CloudflaredSettings>
+        </Cloudflared>
+    </Services>
+</menu>

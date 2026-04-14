@@ -1,0 +1,7 @@
+PLUGIN_NAME=        cloudflared
+PLUGIN_VERSION=     0.1.0
+PLUGIN_REVISION=    1
+PLUGIN_COMMENT=     Cloudflare Tunnel (cloudflared)
+PLUGIN_MAINTAINER=  ai@opnsense.org
+
+.include "../../Mk/plugins.mk"

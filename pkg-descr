@@ -1,0 +1,3 @@
+Cloudflare Tunnel (cloudflared)
+Provides a daemon that allows you to securely tunnel traffic from your local network to Cloudflare.
+This plugin uses the kjake fork for FreeBSD.
