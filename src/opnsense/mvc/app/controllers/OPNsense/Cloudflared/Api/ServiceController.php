@@ -12,6 +12,17 @@ class ServiceController extends ApiMutableServiceControllerBase
     protected static $internalServiceTemplate = 'OPNsense/Cloudflared';
     protected static $internalServiceName = 'cloudflared';
 
+    public function reconfigureAction()
+    {
+        if ($this->request->isPost()) {
+            $backend = new Backend();
+            // reconfigure.sh runs as root: creates dirs, reloads templates, applies sysctl, restarts service
+            $backend->configdRun("cloudflared reconfigure");
+            return ['status' => 'ok'];
+        }
+        return ['status' => 'error'];
+    }
+
     public function installAction()
     {
         if ($this->request->isPost()) {

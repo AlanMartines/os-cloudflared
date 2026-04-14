@@ -26,10 +26,11 @@ fi
 # Apply sysctl tunables if they exist
 if [ -f /usr/local/etc/sysctl.conf.d/cloudflared.conf ]; then
     log_msg "Applying sysctl tunables..."
-    while read line; do
-        if [ -n "$line" ] && [ "${line#\#}" = "$line" ]; then
-            sysctl $line > /dev/null 2>&1
-        fi
+    while IFS= read -r line; do
+        case "$line" in
+            \#*|'') continue ;;
+        esac
+        sysctl "$line" > /dev/null 2>&1
     done < /usr/local/etc/sysctl.conf.d/cloudflared.conf
 fi
 
@@ -41,6 +42,6 @@ fi
 
 # Restart the service
 log_msg "Restarting cloudflared service..."
-/usr/local/sbin/configctl service cloudflared restart
+service cloudflared restart
 
 log_msg "Cloudflared reconfiguration complete."

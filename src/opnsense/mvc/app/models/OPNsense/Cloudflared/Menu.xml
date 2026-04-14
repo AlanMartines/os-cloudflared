@@ -1,5 +1,5 @@
 <menu>
-    <VPN order="490">
-        <Cloudflared VisibleName="Cloudflare Tunnel" url="/ui/cloudflared/"/>
+    <VPN>
+        <Cloudflared order="490" VisibleName="Cloudflare Tunnel" url="/ui/cloudflared/"/>
     </VPN>
 </menu>

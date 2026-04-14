@@ -1,5 +1,0 @@
-<metadata>
-    <template name="rc.conf.d" destination="/etc/rc.conf.d/cloudflared" />
-    <template name="cloudflared.token" destination="/usr/local/etc/cloudflared/token" />
-    <template name="tunables.conf" destination="/usr/local/etc/sysctl.conf.d/cloudflared.conf" />
-</metadata>
