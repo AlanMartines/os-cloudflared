@@ -4,7 +4,7 @@
             <Settings>
                 <description>Allow access to Cloudflare Tunnel settings</description>
                 <patterns>
-                    <pattern>ui/cloudflared*</pattern>
+                    <pattern>ui/cloudflared/*</pattern>
                     <pattern>api/cloudflared/settings/*</pattern>
                 </patterns>
             </Settings>
