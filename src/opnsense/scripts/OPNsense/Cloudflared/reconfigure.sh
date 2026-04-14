@@ -8,9 +8,10 @@ log_msg() {
 
 log_msg "Starting cloudflared reconfiguration..."
 
-# Ensure config directory exists with restricted permissions
+# Ensure required directories exist before template generation
 mkdir -p /usr/local/etc/cloudflared
 chmod 750 /usr/local/etc/cloudflared
+mkdir -p /usr/local/etc/sysctl.conf.d
 
 # Reload OPNsense templates
 log_msg "Reloading configuration templates..."
