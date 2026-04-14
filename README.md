@@ -83,7 +83,7 @@ O arquivo será gerado em `/usr/ports/packages/All/os-cloudflared-*.txz`.
 
 ### 3. Verifique o Status
 
-- O status do serviço aparece no rodapé da página (ícone verde = Running).
+- Ao final da página de configurações há uma barra de status com o estado atual do serviço (**Running** / **Stopped**) e botões de **Start**, **Stop** e **Restart**.
 - Para acompanhar os logs em tempo real:
     ```bash
     tail -f /var/log/cloudflared.log
@@ -120,6 +120,13 @@ Este projeto segue a mesma licença do OPNsense — BSD 2-Clause "Simplified".
 - Baseado no guia de instalação de [hannoeru.me](https://hannoeru.me/posts/install-cloudflared-opnsense).
 - Binários fornecidos pelo fork [kjake/cloudflared](https://github.com/kjake/cloudflared) para FreeBSD.
 
+## Ambiente de Desenvolvimento e Testes
+
+| Componente | Versão |
+|------------|--------|
+| OPNsense   | 26.1.6-amd64 |
+| FreeBSD    | 14.3-RELEASE-p10 |
+
 ---
 
-> **Status:** Este projeto está em **desenvolvimento ativo** (v0.1.0). Teste com cautela em ambientes de produção.
+> **Status:** Este projeto está em **desenvolvimento ativo** (v0.2.0). Teste com cautela em ambientes de produção.
