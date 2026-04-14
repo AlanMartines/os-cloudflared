@@ -27,7 +27,7 @@ Este método é ideal para testar alterações rapidamente no código.
     ```
 3.  Clone este repositório:
     ```bash
-    git clone https://github.com/seu-usuario/os-cloudflared cloudflared
+    git clone https://github.com/AlanMartines/os-cloudflared cloudflared
     ```
 4.  Instale o plugin diretamente no sistema:
     ```bash
