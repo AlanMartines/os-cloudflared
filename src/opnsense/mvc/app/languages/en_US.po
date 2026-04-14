@@ -85,3 +85,6 @@ msgstr "Running"
 
 msgid "Stopped"
 msgstr "Stopped"
+
+msgid "No response from server. Check if configd is running."
+msgstr "No response from server. Check if configd is running."

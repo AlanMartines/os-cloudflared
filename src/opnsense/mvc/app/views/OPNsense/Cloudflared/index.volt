@@ -32,18 +32,16 @@
             ajaxCall("/api/cloudflared/service/install", {}, function(data, status) {
                 $("#installBtn").prop('disabled', false);
                 $("#installIcon").addClass('fa-download').removeClass('fa-spinner fa-spin');
-                if (status === "success" && data.response) {
-                    var output = data.response.trim();
-                    var dlgType = (output.indexOf("successful") !== -1)
-                        ? BootstrapDialog.TYPE_SUCCESS
-                        : BootstrapDialog.TYPE_DANGER;
-                    BootstrapDialog.show({
-                        type: dlgType,
-                        title: "{{ lang._('Install/Update Binary') }}",
-                        message: $('<pre/>').text(output),
-                        buttons: [{ label: 'OK', action: function(d) { d.close(); } }]
-                    });
-                }
+                var output = (data && data.response) ? data.response.trim() : '';
+                var dlgType = (output.indexOf("successful") !== -1)
+                    ? BootstrapDialog.TYPE_SUCCESS
+                    : BootstrapDialog.TYPE_DANGER;
+                BootstrapDialog.show({
+                    type: dlgType,
+                    title: "{{ lang._('Install/Update Binary') }}",
+                    message: $('<pre/>').text(output || "{{ lang._('No response from server. Check if configd is running.') }}"),
+                    buttons: [{ label: 'OK', action: function(d) { d.close(); } }]
+                });
             });
         });
 

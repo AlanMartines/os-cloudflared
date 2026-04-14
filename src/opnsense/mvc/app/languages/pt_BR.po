@@ -85,3 +85,6 @@ msgstr "Executando"
 
 msgid "Stopped"
 msgstr "Parado"
+
+msgid "No response from server. Check if configd is running."
+msgstr "Sem resposta do servidor. Verifique se o configd está em execução."
