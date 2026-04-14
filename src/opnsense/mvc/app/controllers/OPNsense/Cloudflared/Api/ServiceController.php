@@ -14,8 +14,11 @@ class ServiceController extends ApiMutableServiceControllerBase
 
     public function installAction()
     {
-        $backend = new Backend();
-        $response = $backend->configdRun("cloudflared install_binary");
-        return array("response" => $response);
+        if ($this->request->isPost()) {
+            $backend = new Backend();
+            $response = trim($backend->configdRun("cloudflared install_binary"));
+            return ['response' => $response];
+        }
+        return ['response' => 'error'];
     }
 }

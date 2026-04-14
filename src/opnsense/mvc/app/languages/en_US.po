@@ -28,6 +28,12 @@ msgstr "Enable"
 msgid "Tunnel Token"
 msgstr "Tunnel Token"
 
+msgid "Disable Auto-Update"
+msgstr "Disable Auto-Update"
+
+msgid "Enable Post-Quantum Encryption"
+msgstr "Enable Post-Quantum Encryption"
+
 msgid "Disable PMTU Discovery"
 msgstr "Disable PMTU Discovery"
 
@@ -40,8 +46,14 @@ msgstr "UDP Recv Space (net.inet.udp.recvspace)"
 msgid "Enable Cloudflare Tunnel"
 msgstr "Enable Cloudflare Tunnel"
 
-msgid "The token for your Cloudflare Tunnel."
-msgstr "The token for your Cloudflare Tunnel."
+msgid "The token for your Cloudflare Tunnel. Get it from one.dash.cloudflare.com > Access > Tunnels."
+msgstr "The token for your Cloudflare Tunnel. Get it from one.dash.cloudflare.com > Access > Tunnels."
+
+msgid "Pass --no-autoupdate to cloudflared. Recommended when managing updates manually via the Install/Update Binary button."
+msgstr "Pass --no-autoupdate to cloudflared. Recommended when managing updates manually via the Install/Update Binary button."
+
+msgid "Pass --post-quantum to enable post-quantum cryptography for the tunnel connection."
+msgstr "Pass --post-quantum to enable post-quantum cryptography for the tunnel connection."
 
 msgid "Disable PMTU discovery for QUIC. Recommended on FreeBSD/OPNsense."
 msgstr "Disable PMTU discovery for QUIC. Recommended on FreeBSD/OPNsense."

@@ -3,41 +3,64 @@
 # $FreeBSD$
 #
 # PROVIDE: cloudflared
-# REQUIRE: LOGIN
+# REQUIRE: NETWORKING SERVERS
 # KEYWORD: shutdown
 #
 # Add the following lines to /etc/rc.conf.d/cloudflared to enable cloudflared:
 #
-# cloudflared_enable (bool):	Set to "NO" by default.
-#				Set it to "YES" to enable cloudflared.
-# cloudflared_token_file (str):	Path to the token file.
-# cloudflared_quic_disable_pmtu_discovery (bool): Set to "YES" by default.
+# cloudflared_enable (bool):                    Set to "NO" by default.
+#                                               Set it to "YES" to enable cloudflared.
+# cloudflared_token_file (str):                 Path to the tunnel token file.
+#                                               Default: /usr/local/etc/cloudflared/token
+# cloudflared_no_autoupdate (bool):             Pass --no-autoupdate. Set to "YES" by default.
+# cloudflared_post_quantum (bool):              Pass --post-quantum. Set to "NO" by default.
+# cloudflared_quic_disable_pmtu_discovery (bool): Pass --quic-disable-pmtu-discovery.
+#                                               Set to "YES" by default.
 
 . /etc/rc.subr
 
 name="cloudflared"
 rcvar="cloudflared_enable"
 
+logfile="/var/log/cloudflared.log"
+pidfile="/var/run/${name}.pid"
+procname="/usr/local/bin/cloudflared"
+
 load_rc_config $name
 
 : ${cloudflared_enable:="NO"}
 : ${cloudflared_token_file:="/usr/local/etc/cloudflared/token"}
+: ${cloudflared_no_autoupdate:="YES"}
+: ${cloudflared_post_quantum:="NO"}
 : ${cloudflared_quic_disable_pmtu_discovery:="YES"}
 
-command="/usr/local/bin/cloudflared"
-pidfile="/var/run/${name}.pid"
-procname="/usr/local/bin/cloudflared"
+# Build tunnel arguments following the recommended token-based setup
+tunnel_args="tunnel"
 
-# Build arguments based on configuration
-command_args="tunnel run --token-file ${cloudflared_token_file}"
-
-if checkyesno cloudflared_quic_disable_pmtu_discovery; then
-    command_args="${command_args} --quic-disable-pmtu-discovery"
+if checkyesno cloudflared_no_autoupdate; then
+    tunnel_args="${tunnel_args} --no-autoupdate"
 fi
 
-# We use daemon to manage the background process and PID
-actual_command="${command}"
+tunnel_args="${tunnel_args} run"
+
+if checkyesno cloudflared_quic_disable_pmtu_discovery; then
+    tunnel_args="${tunnel_args} --quic-disable-pmtu-discovery"
+fi
+
+if checkyesno cloudflared_post_quantum; then
+    tunnel_args="${tunnel_args} --post-quantum"
+fi
+
+# Read token from file and pass via --token (avoids --token-file portability issues)
+if [ -f "${cloudflared_token_file}" ]; then
+    cf_token=$(cat "${cloudflared_token_file}")
+    tunnel_args="${tunnel_args} --token ${cf_token}"
+else
+    echo "WARNING: Token file not found: ${cloudflared_token_file}" >&2
+fi
+
+# Use daemon(8) to manage the process, PID file and log file
 command="/usr/sbin/daemon"
-command_args="-c -f -p ${pidfile} ${actual_command} ${command_args}"
+command_args="-o ${logfile} -p ${pidfile} -f ${procname} ${tunnel_args}"
 
 run_rc_command "$1"

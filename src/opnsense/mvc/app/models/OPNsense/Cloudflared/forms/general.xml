@@ -8,8 +8,20 @@
     <field>
         <id>Cloudflared.general.token</id>
         <label>Tunnel Token</label>
-        <type>text</type>
-        <help>The token for your Cloudflare Tunnel.</help>
+        <type>password</type>
+        <help>The token for your Cloudflare Tunnel. Get it from one.dash.cloudflare.com > Access > Tunnels.</help>
+    </field>
+    <field>
+        <id>Cloudflared.general.no_autoupdate</id>
+        <label>Disable Auto-Update</label>
+        <type>checkbox</type>
+        <help>Pass --no-autoupdate to cloudflared. Recommended when managing updates manually via the Install/Update Binary button.</help>
+    </field>
+    <field>
+        <id>Cloudflared.general.post_quantum</id>
+        <label>Enable Post-Quantum Encryption</label>
+        <type>checkbox</type>
+        <help>Pass --post-quantum to enable post-quantum cryptography for the tunnel connection.</help>
     </field>
     <field>
         <id>Cloudflared.general.quic_disable_pmtu_discovery</id>

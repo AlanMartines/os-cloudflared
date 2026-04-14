@@ -8,7 +8,7 @@ log_msg() {
 
 log_msg "Starting cloudflared reconfiguration..."
 
-# Ensure config directory exists
+# Ensure config directory exists with restricted permissions
 mkdir -p /usr/local/etc/cloudflared
 chmod 750 /usr/local/etc/cloudflared
 
@@ -16,14 +16,26 @@ chmod 750 /usr/local/etc/cloudflared
 log_msg "Reloading configuration templates..."
 /usr/local/sbin/configctl template reload OPNsense/Cloudflared
 
+# Restrict token file permissions (must not be world-readable)
+if [ -f /usr/local/etc/cloudflared/token ]; then
+    chmod 600 /usr/local/etc/cloudflared/token
+    log_msg "Token file permissions set to 600."
+fi
+
 # Apply sysctl tunables if they exist
 if [ -f /usr/local/etc/sysctl.conf.d/cloudflared.conf ]; then
     log_msg "Applying sysctl tunables..."
     while read line; do
-        if [ ! -z "$line" ] && [ "${line#\#}" = "$line" ]; then
+        if [ -n "$line" ] && [ "${line#\#}" = "$line" ]; then
             sysctl $line > /dev/null 2>&1
         fi
     done < /usr/local/etc/sysctl.conf.d/cloudflared.conf
+fi
+
+# Check if the binary exists before attempting to start the service
+if [ ! -x /usr/local/bin/cloudflared ]; then
+    log_msg "WARNING: Binary /usr/local/bin/cloudflared not found. Use 'Install/Update Binary' to install it first."
+    exit 0
 fi
 
 # Restart the service
