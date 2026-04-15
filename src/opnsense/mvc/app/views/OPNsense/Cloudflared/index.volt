@@ -17,11 +17,16 @@
 
         // Salvar e reconfigura o serviço
         $("#saveAct").click(function() {
+            $("#saveAct_progress").addClass("fa fa-spinner fa-pulse");
             saveFormToEndpoint("/api/cloudflared/settings/set", 'frm_general', function() {
                 ajaxCall("/api/cloudflared/service/reconfigure", {}, function() {
                     updateServiceStatus(i18n);
+                    $("#saveAct_progress").removeClass("fa fa-spinner fa-pulse").addClass("fa fa-check text-success");
+                    setTimeout(function() {
+                        $("#saveAct_progress").removeClass("fa fa-check text-success");
+                    }, 2000);
                 });
-            }, true, "saveAct_progress");
+            });
         });
 
         // Instalar / atualizar binário
