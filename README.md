@@ -16,6 +16,7 @@ Implementa o **Method 1: Token-based Setup (Recommended)** conforme o guia [hann
 - **Log persistente** — `/var/log/cloudflared.log` via `daemon(8)`
 - **Serviço RC** — `REQUIRE: NETWORKING SERVERS`, inicia após a rede estar disponível
 - **Status do Tunnel** — badge **Saudável/Conectando** em tempo real via endpoint local de métricas
+- **Integração com Diagnostics** — aparece em **System → Diagnostics → Services** com botões Start/Stop/Restart
 
 ## Ambiente de Testes
 

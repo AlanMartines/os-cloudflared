@@ -4,6 +4,7 @@
 _Testado em OPNsense 26.1.6-amd64 / FreeBSD 14.3-RELEASE-p10_
 
 ### Novas Funcionalidades
+- Registro em **System → Diagnostics → Services**: arquivo `src/etc/inc/plugins.inc.d/cloudflared.inc` com `cloudflared_services()` — aparece na lista quando habilitado, com botões Start/Stop/Restart nativos do OPNsense.
 - Status do tunnel em tempo real: badge **Túnel: Saudável** (verde) / **Túnel: Conectando** (laranja) na barra de status.
 - Endpoint `/api/cloudflared/service/tunnel_status` retorna JSON `{"tunnel":"healthy"|"connecting"|"stopped"}`.
 - Script `tunnel_status.sh` consulta `http://localhost:2000/healthcheck` (endpoint local do cloudflared).
