@@ -8,6 +8,28 @@
         var data_get_map = {'frm_general': "/api/cloudflared/settings/get"};
         mapDataToFormUI(data_get_map).done(function(data) {
             $('.selectpicker').selectpicker('refresh');
+
+            // Adiciona botão de mostrar/ocultar ao campo token
+            var tokenInput = $("#Cloudflared\\.general\\.token");
+            tokenInput.wrap('<div class="input-group"></div>');
+            tokenInput.after(
+                '<span class="input-group-btn">' +
+                '<button class="btn btn-default" type="button" id="toggleTokenBtn" title="{{ lang._('Show/Hide') }}">' +
+                '<i class="fa fa-eye" id="toggleTokenIcon"></i>' +
+                '</button>' +
+                '</span>'
+            );
+            $("#toggleTokenBtn").click(function() {
+                var inp = $("#Cloudflared\\.general\\.token");
+                var icon = $("#toggleTokenIcon");
+                if (inp.attr("type") === "password") {
+                    inp.attr("type", "text");
+                    icon.removeClass("fa-eye").addClass("fa-eye-slash");
+                } else {
+                    inp.attr("type", "password");
+                    icon.removeClass("fa-eye-slash").addClass("fa-eye");
+                }
+            });
         });
 
         var i18n = {
@@ -95,7 +117,7 @@
     <div id="general" class="tab-pane fade in active">
         <div class="content-box-main">
             {{ partial("layout_partials/base_form",['fields':generalForm,'id':'frm_general'])}}
-            <div class="col-md-12">
+            <div class="col-md-12" style="padding-bottom: 15px;">
                 <hr />
                 <button class="btn btn-primary" id="saveAct" type="button">
                     <b>{{ lang._('Apply') }}</b> <i id="saveAct_progress"></i>
