@@ -16,9 +16,6 @@
             <post_quantum type="BooleanField">
                 <default>0</default>
             </post_quantum>
-            <quic_disable_pmtu_discovery type="BooleanField">
-                <default>1</default>
-            </quic_disable_pmtu_discovery>
             <kern_ipc_maxsockbuf type="IntegerField">
                 <default>16777216</default>
             </kern_ipc_maxsockbuf>

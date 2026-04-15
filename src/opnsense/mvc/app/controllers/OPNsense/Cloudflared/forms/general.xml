@@ -24,12 +24,6 @@
         <help>Pass --post-quantum to enable post-quantum cryptography for the tunnel connection.</help>
     </field>
     <field>
-        <id>Cloudflared.general.quic_disable_pmtu_discovery</id>
-        <label>Disable PMTU Discovery</label>
-        <type>checkbox</type>
-        <help>Disable PMTU discovery for QUIC. Recommended on FreeBSD/OPNsense.</help>
-    </field>
-    <field>
         <id>Cloudflared.general.kern_ipc_maxsockbuf</id>
         <label>Max Socket Buffer (kern.ipc.maxsockbuf)</label>
         <type>text</type>

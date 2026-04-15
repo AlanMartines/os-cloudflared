@@ -34,9 +34,6 @@ msgstr "Desativar Atualização Automática"
 msgid "Enable Post-Quantum Encryption"
 msgstr "Habilitar Criptografia Pós-Quântica"
 
-msgid "Disable PMTU Discovery"
-msgstr "Desativar Descoberta de PMTU"
-
 msgid "Max Socket Buffer (kern.ipc.maxsockbuf)"
 msgstr "Buffer Máximo de Socket (kern.ipc.maxsockbuf)"
 
@@ -54,9 +51,6 @@ msgstr "Passa --no-autoupdate ao cloudflared. Recomendado quando as atualizaçõ
 
 msgid "Pass --post-quantum to enable post-quantum cryptography for the tunnel connection."
 msgstr "Passa --post-quantum para habilitar criptografia pós-quântica na conexão do túnel."
-
-msgid "Disable PMTU discovery for QUIC. Recommended on FreeBSD/OPNsense."
-msgstr "Desativar a descoberta de PMTU para QUIC. Recomendado no FreeBSD/OPNsense."
 
 msgid "Recommended value for QUIC performance. Default is 16777216."
 msgstr "Valor recomendado para desempenho do QUIC. O padrão é 16777216."

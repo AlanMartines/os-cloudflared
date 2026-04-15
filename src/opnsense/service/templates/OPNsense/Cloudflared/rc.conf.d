@@ -17,8 +17,3 @@ cloudflared_post_quantum="YES"
 {% else %}
 cloudflared_post_quantum="NO"
 {% endif %}
-{% if helpers.exists('OPNsense.Cloudflared.general.quic_disable_pmtu_discovery') and OPNsense.Cloudflared.general.quic_disable_pmtu_discovery == '1' %}
-cloudflared_quic_disable_pmtu_discovery="YES"
-{% else %}
-cloudflared_quic_disable_pmtu_discovery="NO"
-{% endif %}
