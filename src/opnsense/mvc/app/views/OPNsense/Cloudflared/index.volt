@@ -10,19 +10,18 @@
             $('.selectpicker').selectpicker('refresh');
         });
 
-        // Tradução das strings de status (resolvidas no servidor pelo Volt)
         var i18n = {
             running: "{{ lang._('Running') }}",
             stopped: "{{ lang._('Stopped') }}"
         };
 
         // Salvar e reconfigura o serviço
-        $("#saveBtn").click(function() {
+        $("#saveAct").click(function() {
             saveFormToEndpoint("/api/cloudflared/settings/set", 'frm_general', function() {
-                ajaxCall("/api/cloudflared/service/reconfigure", {}, function(data, status) {
+                ajaxCall("/api/cloudflared/service/reconfigure", {}, function() {
                     updateServiceStatus(i18n);
                 });
-            }, false);
+            }, true, "saveAct_progress");
         });
 
         // Instalar / atualizar binário
@@ -93,11 +92,11 @@
             {{ partial("layout_partials/base_form",['fields':generalForm,'id':'frm_general'])}}
             <div class="col-md-12">
                 <hr />
-                <button class="btn btn-primary" id="saveBtn" type="button">
-                    <b>{{ lang._('Apply') }}</b> <i id="saveProgress" class=""></i>
+                <button class="btn btn-primary" id="saveAct" type="button">
+                    <b>{{ lang._('Apply') }}</b> <i id="saveAct_progress"></i>
                 </button>
                 <button class="btn btn-default" id="installBtn" type="button">
-                    <i id="installIcon" class="fa fa-download"></i>
+                    <i id="installIcon" class="fa fa-download fa-fw"></i>
                     <b>{{ lang._('Install/Update Binary') }}</b>
                 </button>
             </div>
@@ -115,13 +114,13 @@
             </td>
             <td style="text-align: right">
                 <button class="btn btn-xs btn-default" id="startBtn" type="button" style="display:none;">
-                    <i class="fa fa-play"></i> {{ lang._('Start') }}
+                    <i class="fa fa-play fa-fw"></i> {{ lang._('Start') }}
                 </button>
                 <button class="btn btn-xs btn-default" id="stopBtn" type="button" style="display:none;">
-                    <i class="fa fa-stop"></i> {{ lang._('Stop') }}
+                    <i class="fa fa-stop fa-fw"></i> {{ lang._('Stop') }}
                 </button>
                 <button class="btn btn-xs btn-default" id="restartBtn" type="button" style="display:none;">
-                    <i class="fa fa-repeat"></i> {{ lang._('Restart') }}
+                    <i class="fa fa-repeat fa-fw"></i> {{ lang._('Restart') }}
                 </button>
             </td>
         </tr>
