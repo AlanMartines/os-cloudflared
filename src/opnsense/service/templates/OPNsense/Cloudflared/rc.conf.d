@@ -6,7 +6,6 @@ cloudflared_enable="YES"
 {% else %}
 cloudflared_enable="NO"
 {% endif %}
-cloudflared_token_file="/usr/local/etc/cloudflared/token"
 {% if helpers.exists('OPNsense.Cloudflared.general.no_autoupdate') and OPNsense.Cloudflared.general.no_autoupdate == '1' %}
 cloudflared_no_autoupdate="YES"
 {% else %}
