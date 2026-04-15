@@ -11,10 +11,11 @@ Implementa o **Method 1: Token-based Setup (Recommended)** conforme o guia [hann
 - **Instalador de Binário** — baixa/atualiza automaticamente a versão mais recente, com detecção de versão FreeBSD e arquitetura
 - **Sem Auto-Update** — `--no-autoupdate` habilitado por padrão; atualizações sempre manuais
 - **Criptografia Pós-Quântica** — opção `--post-quantum` disponível
-- **Otimização QUIC** — aplica `kern.ipc.maxsockbuf` e `net.inet.udp.recvspace` via sysctl
+- **Otimização QUIC** — aplica `kern.ipc.maxsockbuf` e `net.inet.udp.recvspace` via sysctl no Apply
 - **Token seguro** — arquivo com permissões `600`, nunca exposto em argumentos de processo
 - **Log persistente** — `/var/log/cloudflared.log` via `daemon(8)`
 - **Serviço RC** — `REQUIRE: NETWORKING SERVERS`, inicia após a rede estar disponível
+- **Status do Tunnel** — badge **Saudável/Conectando** em tempo real via endpoint local de métricas
 
 ## Ambiente de Testes
 
@@ -74,7 +75,10 @@ make package
    - **Enable Post-Quantum Encryption** — opcional
 6. Clique em **Apply**
 
-O serviço inicia automaticamente. O status **Running** (verde) aparece na barra inferior da página.
+O serviço inicia automaticamente. A barra inferior exibe:
+- **Executando** (verde) — processo ativo
+- **Túnel: Saudável** (verde) — tunnel conectado ao Cloudflare
+- **Túnel: Conectando** (laranja) — processo iniciado, aguardando conexão
 
 ### 3. Verificar
 
@@ -84,9 +88,23 @@ service cloudflared status
 
 # Logs em tempo real
 tail -f /var/log/cloudflared.log
+
+# Health check local do tunnel
+fetch -qo - http://localhost:2000/healthcheck
 ```
 
 No **Cloudflare Dashboard**: Networks → Tunnels → o túnel deve aparecer como **Healthy**.
+
+## O que o Apply faz
+
+Ao clicar em **Apply**, o plugin executa automaticamente na sequência:
+
+1. Salva as configurações no modelo XML
+2. Cria os diretórios necessários (se não existirem)
+3. Regenera os arquivos de configuração a partir dos templates
+4. Define `chmod 600` no arquivo de token
+5. Aplica os tunables de sysctl (`kern.ipc.maxsockbuf`, `net.inet.udp.recvspace`)
+6. Reinicia o serviço cloudflared
 
 ## Arquivos Gerados
 

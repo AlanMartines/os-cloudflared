@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## 0.4.0 (2026-04-15)
+_Testado em OPNsense 26.1.6-amd64 / FreeBSD 14.3-RELEASE-p10_
+
+### Novas Funcionalidades
+- Status do tunnel em tempo real: badge **Túnel: Saudável** (verde) / **Túnel: Conectando** (laranja) na barra de status.
+- Endpoint `/api/cloudflared/service/tunnel_status` retorna JSON `{"tunnel":"healthy"|"connecting"|"stopped"}`.
+- Script `tunnel_status.sh` consulta `http://localhost:2000/healthcheck` (endpoint local do cloudflared).
+
+### Correções de Bugs
+- Correção: `--metrics` é flag global do cloudflared — deve vir **antes** de `tunnel`, não após `run`. Posicionada corretamente no rc.d como `cloudflared --metrics localhost:2000 tunnel ... run`.
+- Correção: `reconfigureAction()` na base class (`ApiMutableServiceControllerBase`) não executava o `reconfigure.sh` — sobrescrita no `ServiceController` para chamar `configdRun("cloudflared reconfigure")`, garantindo aplicação dos sysctl tunables e demais passos.
+- Correção: sysctl tunables não aplicados ao kernel em execução — substituído `sysctl "$line"` por `sysctl -w "${key}=${val}"` com log de sucesso/falha.
+
+### Melhorias
+- `updateServiceStatus()` na view também chama `updateTunnelStatus()` quando o serviço está Running.
+- Strings i18n adicionadas: `Tunnel`, `Healthy`, `Connecting` (en_US e pt_BR).
+
+---
+
 ## 0.3.0 (2026-04-15)
 _Testado em OPNsense 26.1.6-amd64 / FreeBSD 14.3-RELEASE-p10_
 
