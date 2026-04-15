@@ -36,7 +36,13 @@ if [ -f /usr/local/etc/sysctl.conf.d/cloudflared.conf ]; then
         case "$line" in
             \#*|'') continue ;;
         esac
-        sysctl "$line" > /dev/null 2>&1
+        key=$(echo "$line" | cut -d'=' -f1)
+        val=$(echo "$line" | cut -d'=' -f2-)
+        if sysctl -w "${key}=${val}" > /dev/null 2>&1; then
+            log_msg "sysctl ${key}=${val} applied."
+        else
+            log_msg "WARNING: sysctl ${key}=${val} failed (may require reboot)."
+        fi
     done < /usr/local/etc/sysctl.conf.d/cloudflared.conf
 fi
 
