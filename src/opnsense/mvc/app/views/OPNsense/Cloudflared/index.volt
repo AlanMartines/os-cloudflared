@@ -34,7 +34,10 @@
 
         var i18n = {
             running: "{{ lang._('Running') }}",
-            stopped: "{{ lang._('Stopped') }}"
+            stopped: "{{ lang._('Stopped') }}",
+            healthy: "{{ lang._('Healthy') }}",
+            connecting: "{{ lang._('Connecting') }}",
+            tunnel_status: "{{ lang._('Tunnel') }}"
         };
 
         // Salvar e reconfigura o serviço
@@ -86,7 +89,7 @@
     });
 
     function updateServiceStatus(i18n) {
-        ajaxCall("/api/cloudflared/service/status", {}, function(data, status) {
+        ajaxCall("/api/cloudflared/service/status", {}, function(data) {
             var running = data && data.status === "running";
             if (running) {
                 $("#svc_status").html(
@@ -96,15 +99,34 @@
                 );
                 $("#startBtn").hide();
                 $("#stopBtn, #restartBtn").show();
+                updateTunnelStatus(i18n);
             } else {
                 $("#svc_status").html(
                     '<span class="label label-danger">'
                     + '<i class="fa fa-stop fa-fw"></i> ' + i18n.stopped
                     + '</span>'
                 );
+                $("#tunnel_health").html('');
                 $("#startBtn").show();
                 $("#stopBtn, #restartBtn").hide();
             }
+        });
+    }
+
+    function updateTunnelStatus(i18n) {
+        ajaxCall("/api/cloudflared/service/tunnel_status", {}, function(data) {
+            var state = data && data.tunnel ? data.tunnel : 'unknown';
+            var html = '';
+            if (state === 'healthy') {
+                html = '&nbsp;<span class="label label-success">'
+                    + '<i class="fa fa-cloud fa-fw"></i> ' + i18n.tunnel_status + ': ' + i18n.healthy
+                    + '</span>';
+            } else if (state === 'connecting') {
+                html = '&nbsp;<span class="label label-warning">'
+                    + '<i class="fa fa-cloud fa-fw"></i> ' + i18n.tunnel_status + ': ' + i18n.connecting
+                    + '</span>';
+            }
+            $("#tunnel_health").html(html);
         });
     }
 </script>
@@ -138,6 +160,7 @@
                 <b>{{ lang._('Cloudflare Tunnel') }}</b>
                 &nbsp;
                 <span id="svc_status"><i class="fa fa-spinner fa-spin"></i></span>
+                <span id="tunnel_health"></span>
             </td>
             <td style="text-align: right">
                 <button class="btn btn-xs btn-default" id="startBtn" type="button" style="display:none;">

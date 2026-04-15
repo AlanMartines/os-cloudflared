@@ -26,6 +26,17 @@ class ServiceController extends ApiMutableServiceControllerBase
         return ['status' => 'failed'];
     }
 
+    public function tunnelStatusAction()
+    {
+        $backend = new Backend();
+        $response = $backend->configdRun("cloudflared tunnel_status");
+        $data = json_decode(trim($response), true);
+        if ($data === null) {
+            return ['tunnel' => 'unknown'];
+        }
+        return $data;
+    }
+
     public function installAction()
     {
         if ($this->request->isPost()) {

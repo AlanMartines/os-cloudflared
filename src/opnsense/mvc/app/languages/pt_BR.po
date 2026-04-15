@@ -82,3 +82,12 @@ msgstr "Parado"
 
 msgid "No response from server. Check if configd is running."
 msgstr "Sem resposta do servidor. Verifique se o configd está em execução."
+
+msgid "Tunnel"
+msgstr "Túnel"
+
+msgid "Healthy"
+msgstr "Saudável"
+
+msgid "Connecting"
+msgstr "Conectando"
