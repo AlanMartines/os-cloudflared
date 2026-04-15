@@ -107,6 +107,30 @@ Ao clicar em **Apply**, o plugin executa automaticamente na sequência:
 5. Aplica os tunables de sysctl (`kern.ipc.maxsockbuf`, `net.inet.udp.recvspace`)
 6. Reinicia o serviço cloudflared
 
+## Desinstalação
+
+```sh
+# Para o serviço
+service cloudflared stop
+
+# Desinstala o plugin
+cd /usr/plugins/net/cloudflared
+make deinstall
+
+# Remove arquivos gerados
+rm -f /etc/rc.conf.d/cloudflared
+rm -f /usr/local/etc/sysctl.conf.d/cloudflared.conf
+rm -f /var/log/cloudflared.log
+rm -f /var/run/cloudflared.pid
+rm -f /usr/local/bin/cloudflared
+rm -rf /usr/local/etc/cloudflared
+
+# Reinicia configd e limpa cache
+service configd restart
+rm -rf /usr/local/opnsense/mvc/app/cache/*
+rm -f /tmp/opnsense_menu_cache.xml
+```
+
 ## Arquivos Gerados
 
 | Arquivo | Descrição |
