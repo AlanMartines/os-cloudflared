@@ -107,6 +107,33 @@ Ao clicar em **Apply**, o plugin executa automaticamente na sequência:
 5. Aplica os tunables de sysctl (`kern.ipc.maxsockbuf`, `net.inet.udp.recvspace`)
 6. Reinicia o serviço cloudflared
 
+## OPNsense / FreeBSD QUIC stability tuning
+
+Se os logs exibirem intermitentemente:
+- `failed to accept QUIC stream: timeout: no recent network activity`
+- `failed to accept QUIC stream: Application error 0x0 (remote)`
+
+você pode melhorar a estabilidade aumentando os buffers de socket UDP e desabilitando o QUIC PMTU discovery.
+
+Comandos em tempo de execução:
+
+```sh
+sysctl kern.ipc.maxsockbuf=16777216
+sysctl net.inet.udp.recvspace=8388608
+sysrc cloudflared_mode='tunnel --no-autoupdate --quic-disable-pmtu-discovery run'
+service cloudflared restart
+```
+
+Para persistir após reboot no OPNsense:
+- **System → Settings → Tunables**
+- Adicione ou atualize:
+  - `kern.ipc.maxsockbuf = 16777216`
+  - `net.inet.udp.recvspace = 8388608`
+
+> **Notas:**
+> - Erros esporádicos `Application error 0x0 (remote)` ainda podem ocorrer e por si só não comprovam corrupção de pacotes.
+> - `--quic-disable-pmtu-discovery` deve aparecer antes de `run`.
+
 ## Desinstalação
 
 ```sh
