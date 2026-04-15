@@ -6,13 +6,4 @@ cloudflared_enable="YES"
 {% else %}
 cloudflared_enable="NO"
 {% endif %}
-{% if helpers.exists('OPNsense.Cloudflared.general.no_autoupdate') and OPNsense.Cloudflared.general.no_autoupdate == '1' %}
-cloudflared_no_autoupdate="YES"
-{% else %}
-cloudflared_no_autoupdate="NO"
-{% endif %}
-{% if helpers.exists('OPNsense.Cloudflared.general.post_quantum') and OPNsense.Cloudflared.general.post_quantum == '1' %}
-cloudflared_post_quantum="YES"
-{% else %}
-cloudflared_post_quantum="NO"
-{% endif %}
+cloudflared_mode="tunnel{% if helpers.exists('OPNsense.Cloudflared.general.no_autoupdate') and OPNsense.Cloudflared.general.no_autoupdate == '1' %} --no-autoupdate{% endif %} run{% if helpers.exists('OPNsense.Cloudflared.general.post_quantum') and OPNsense.Cloudflared.general.post_quantum == '1' %} --post-quantum{% endif %}"

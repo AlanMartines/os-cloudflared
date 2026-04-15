@@ -1,98 +1,31 @@
 #!/bin/sh
 
-# $FreeBSD$
-#
 # PROVIDE: cloudflared
 # REQUIRE: NETWORKING SERVERS
 # KEYWORD: shutdown
-#
-# Add the following lines to /etc/rc.conf.d/cloudflared to enable cloudflared:
-#
-# cloudflared_enable (bool):      Set to "NO" by default.
-#                                 Set it to "YES" to enable cloudflared.
-# cloudflared_token_file (str):   Path to the tunnel token file.
-#                                 Default: /usr/local/etc/cloudflared/token
-# cloudflared_flags (str):        Additional flags for cloudflared tunnel run.
-#                                 Default: ""
 
 . /etc/rc.subr
 
 name="cloudflared"
 rcvar="cloudflared_enable"
-
 logfile="/var/log/cloudflared.log"
-pidfile="/var/run/${name}.pid"
+pidfile="/var/run/cloudflared.pid"
 procname="/usr/local/bin/cloudflared"
 
 load_rc_config $name
 
 : ${cloudflared_enable:="NO"}
-: ${cloudflared_token_file:="/usr/local/etc/cloudflared/token"}
-: ${cloudflared_no_autoupdate:="YES"}
-: ${cloudflared_post_quantum:="NO"}
-: ${cloudflared_flags:=""}
+: ${cloudflared_mode:="tunnel"}
 
-start_precmd="${name}_precmd"
-start_cmd="${name}_start"
-stop_cmd="${name}_stop"
-status_cmd="${name}_status"
+# Load token from secure file
+if [ -f /usr/local/etc/cloudflared/token ]; then
+    token=$(cat /usr/local/etc/cloudflared/token)
+    command_args="${cloudflared_mode} --token ${token}"
+else
+    command_args="${cloudflared_mode}"
+fi
 
-cloudflared_precmd()
-{
-    if [ ! -f "${cloudflared_token_file}" ]; then
-        err 1 "Token file not found: ${cloudflared_token_file}. Set the Tunnel Token in the OPNsense UI and click Apply."
-    fi
-    if [ ! -s "${cloudflared_token_file}" ]; then
-        err 1 "Token file is empty: ${cloudflared_token_file}."
-    fi
-}
-
-cloudflared_start()
-{
-    # Build argument list following Method 1: Token-based Setup
-    local args="tunnel"
-
-    if checkyesno cloudflared_no_autoupdate; then
-        args="${args} --no-autoupdate"
-    fi
-
-    args="${args} run"
-
-    if checkyesno cloudflared_post_quantum; then
-        args="${args} --post-quantum"
-    fi
-
-    # Use --token-file (native flag) — token never appears in process arguments
-    args="${args} --token-file ${cloudflared_token_file}"
-
-    if [ -n "${cloudflared_flags}" ]; then
-        args="${args} ${cloudflared_flags}"
-    fi
-
-    echo "Starting ${name}."
-    /usr/sbin/daemon -o "${logfile}" -p "${pidfile}" -f \
-        "${procname}" ${args}
-}
-
-cloudflared_stop()
-{
-    if [ -f "${pidfile}" ]; then
-        echo "Stopping ${name}."
-        kill "$(cat ${pidfile})" 2>/dev/null
-        rm -f "${pidfile}"
-    else
-        echo "${name} is not running."
-    fi
-}
-
-cloudflared_status()
-{
-    if [ -f "${pidfile}" ] && kill -0 "$(cat ${pidfile})" 2>/dev/null; then
-        echo "${name} is running as pid $(cat ${pidfile})."
-    else
-        echo "${name} is not running."
-        return 1
-    fi
-}
+command="/usr/sbin/daemon"
+command_args="-o ${logfile} -p ${pidfile} -f ${procname} ${command_args}"
 
 run_rc_command "$1"
