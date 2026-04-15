@@ -18,11 +18,12 @@ load_rc_config $name
 : ${cloudflared_mode:="tunnel"}
 
 # Load token from secure file
+# --metrics é flag global do cloudflared: deve vir antes do subcomando tunnel
 if [ -f /usr/local/etc/cloudflared/token ]; then
     token=$(cat /usr/local/etc/cloudflared/token)
-    command_args="${cloudflared_mode} --token ${token}"
+    command_args="--metrics localhost:2000 ${cloudflared_mode} --token ${token}"
 else
-    command_args="${cloudflared_mode}"
+    command_args="--metrics localhost:2000 ${cloudflared_mode}"
 fi
 
 command="/usr/sbin/daemon"
