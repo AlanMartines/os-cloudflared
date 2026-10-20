@@ -1,56 +1,39 @@
 <?php
 
+/*
+ * Copyright (C) 2026 Richard Aspden <rick+github@insanityinside.net>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+ * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
 namespace OPNsense\Cloudflared\Api;
 
 use OPNsense\Base\ApiMutableServiceControllerBase;
-use OPNsense\Core\Backend;
 
 class ServiceController extends ApiMutableServiceControllerBase
 {
-    protected static $internalServiceClass = 'OPNsense\Cloudflared\Cloudflared';
-    protected static $internalServiceEnabled = 'general.enabled';
+    protected static $internalServiceClass = '\OPNsense\Cloudflared\Cloudflared';
     protected static $internalServiceTemplate = 'OPNsense/Cloudflared';
+    protected static $internalServiceEnabled = 'general.enabled';
     protected static $internalServiceName = 'cloudflared';
-
-    /**
-     * Reconfigura o serviço: cria diretórios, recarrega templates,
-     * aplica sysctl tunables e reinicia o serviço.
-     */
-    public function reconfigureAction()
-    {
-        if ($this->request->isPost()) {
-            $backend = new Backend();
-            $backend->configdRun("cloudflared reconfigure");
-            return ['status' => 'ok'];
-        }
-        return ['status' => 'failed'];
-    }
-
-    public function tunnelStatusAction()
-    {
-        $backend = new Backend();
-        $response = $backend->configdRun("cloudflared tunnel_status");
-        $data = json_decode(trim($response), true);
-        if ($data === null) {
-            return ['tunnel' => 'unknown'];
-        }
-        return $data;
-    }
-
-    public function installAction()
-    {
-        if ($this->request->isPost()) {
-            $backend = new Backend();
-            $response = $backend->configdRun("cloudflared install_binary");
-            if ($response === null) {
-                return ['response' => 'ERROR: configd did not respond. Run "service configd restart" on OPNsense.'];
-            }
-            $response = trim($response);
-            if ($response === '' || $response === 'FAILED') {
-                return ['response' => 'ERROR: Action not found. Run "service configd restart" on OPNsense to reload actions.'];
-            }
-            return ['response' => $response];
-        }
-        return ['response' => 'error'];
-    }
 }

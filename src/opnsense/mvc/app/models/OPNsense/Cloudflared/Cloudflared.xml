@@ -1,27 +1,53 @@
 <model>
     <mount>//OPNsense/Cloudflared</mount>
-    <description>Cloudflare Tunnel</description>
+    <version>1.0.0</version>
+    <description>Cloudflare Tunnel settings</description>
     <items>
         <general>
             <enabled type="BooleanField">
-                <default>0</default>
+                <Default>0</Default>
+                <Required>Y</Required>
             </enabled>
             <token type="TextField">
                 <Required>Y</Required>
-                <maskMatch>/^[a-zA-Z0-9\._\-]+$/</maskMatch>
+                <Mask>/^[a-zA-Z0-9\._\-=]+$/</Mask>
+                <ValidationMessage>Token may only contain letters, digits, dots, underscores, equal signs, and hyphens.</ValidationMessage>
             </token>
-            <no_autoupdate type="BooleanField">
-                <default>1</default>
-            </no_autoupdate>
+            <protocol type="OptionField">
+                <Default>auto</Default>
+                <Required>Y</Required>
+                <OptionValues>
+                    <auto/>
+                    <quic/>
+                    <http2/>
+                </OptionValues>
+            </protocol>
             <post_quantum type="BooleanField">
-                <default>0</default>
+                <Default>0</Default>
+                <Required>Y</Required>
             </post_quantum>
-            <kern_ipc_maxsockbuf type="IntegerField">
-                <default>16777216</default>
-            </kern_ipc_maxsockbuf>
-            <net_inet_udp_recvspace type="IntegerField">
-                <default>8388608</default>
-            </net_inet_udp_recvspace>
+            <quic_disable_pmtu_discovery type="BooleanField">
+                <Default>0</Default>
+                <Required>Y</Required>
+            </quic_disable_pmtu_discovery>
+            <edge_ip_version type="OptionField">
+                <BlankDesc>auto</BlankDesc>
+                <OptionValues>
+                    <ipv4 value="4">IPv4</ipv4>
+                    <ipv6 value="6">IPv6</ipv6>
+                </OptionValues>
+            </edge_ip_version>
+            <log_level type="OptionField">
+                <Default>info</Default>
+                <Required>Y</Required>
+                <OptionValues>
+                    <info/>
+                    <debug/>
+                    <warn/>
+                    <error/>
+                    <fatal/>
+                </OptionValues>
+            </log_level>
         </general>
     </items>
 </model>

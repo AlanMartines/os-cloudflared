@@ -1,5 +1,34 @@
 # CHANGELOG
 
+## 1.1_1 (2026-10-20) — alinhamento com o upstream
+_Espelho de [opnsense/plugins › net/cloudflared](https://github.com/opnsense/plugins/tree/master/net/cloudflared) no commit `833b944`._
+
+A partir desta versão o repositório é um espelho de desenvolvimento do plugin oficial, usado para testar mudanças e propor PRs.
+
+### Mudanças de arquitetura
+- Binário e rc.d passam a vir do pacote `cloudflared` (`PLUGIN_DEPENDS`); removidos `install_binary.sh` e `src/usr/local/etc/rc.d/cloudflared`.
+- Opções geradas em `config.yml` em vez de flags montadas em `cloudflared_mode`.
+- Token entregue via `cloudflared_env="TUNNEL_TOKEN=..."`; removido o arquivo `/usr/local/etc/cloudflared/token` e o `--token` nos argumentos do processo.
+- `ServiceController` usa o comportamento padrão de `ApiMutableServiceControllerBase`; removidos `reconfigure.sh` e as actions `reconfigure`, `install_binary` e `tunnel_status`.
+- View reescrita com `base_form`, `SimpleActionButton`, `base_apply_button` e `updateServiceControlUI`.
+
+### Novas funcionalidades
+- Opções de protocolo (auto/QUIC/HTTP2), desativar QUIC PMTU discovery, versão de IP do edge e nível de log (modo avançado).
+- Logs no syslog-ng com parser próprio e página **Log File** no menu.
+- Reinício do serviço em `newwanip` e sincronização HA via `cloudflared_xmlrpc_sync()`.
+
+### Correções
+- Validação do token aceita `=`.
+- Desativar o plugin e aplicar agora para o serviço.
+
+### Removido
+- Tunables de sysctl para QUIC (configure em **System → Settings → Tunables** se necessário).
+- Badge de saúde do túnel.
+- Opção `no_autoupdate` (sempre ativo).
+- Traduções `en_US.po` / `pt_BR.po` do plugin.
+
+---
+
 ## 0.4.0 (2026-04-15)
 _Testado em OPNsense 26.1.6-amd64 / FreeBSD 14.3-RELEASE-p10_
 

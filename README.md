@@ -1,173 +1,110 @@
-# OPNsense Plugin: os-cloudflared
+# OPNsense Plugin: os-cloudflared (repositório de desenvolvimento)
 
-Plugin para integração nativa do **Cloudflare Tunnel (cloudflared)** no OPNsense. Permite expor serviços internos para a internet de forma segura, sem abrir portas no firewall ou depender de IPs estáticos.
+Plugin que integra o **Cloudflare Tunnel (cloudflared)** ao OPNsense, permitindo expor serviços internos via Cloudflare Zero Trust sem abrir portas no firewall nem depender de IP público.
 
-Implementa o **Method 1: Token-based Setup (Recommended)** conforme o guia [hannoeru.me](https://hannoeru.me/posts/install-cloudflared-opnsense), usando binários do fork [kjake/cloudflared](https://github.com/kjake/cloudflared) compilado para FreeBSD.
+> **Este repositório é um espelho de desenvolvimento.** A versão oficial e mantida do plugin está em [opnsense/plugins › net/cloudflared](https://github.com/opnsense/plugins/tree/master/net/cloudflared) (mantenedor: Richard Aspden). Este repositório serve para testar mudanças e propor PRs ao oficial. Usuários finais devem instalar o plugin oficial pelo **System → Firmware → Plugins** (`os-cloudflared`).
+
+Sincronizado com o upstream no commit [`833b944`](https://github.com/opnsense/plugins/commit/833b94414ff01ddec22c4f9e3d84c5dd1e1cbdab) (versão 1.1_1).
 
 ## Funcionalidades
 
-- **Interface MVC nativa** — menu **Services → Cloudflare Tunnel** integrado ao OPNsense
-- **Autenticação por Token** — túneis gerenciados via Cloudflare Zero Trust
-- **Instalador de Binário** — baixa/atualiza automaticamente a versão mais recente, com detecção de versão FreeBSD e arquitetura
-- **Sem Auto-Update** — `--no-autoupdate` habilitado por padrão; atualizações sempre manuais
-- **Criptografia Pós-Quântica** — opção `--post-quantum` disponível
-- **Otimização QUIC** — aplica `kern.ipc.maxsockbuf` e `net.inet.udp.recvspace` via sysctl no Apply
-- **Token seguro** — arquivo com permissões `600`, nunca exposto em argumentos de processo
-- **Log persistente** — `/var/log/cloudflared.log` via `daemon(8)`
-- **Serviço RC** — `REQUIRE: NETWORKING SERVERS`, inicia após a rede estar disponível
-- **Status do Tunnel** — badge **Saudável/Conectando** em tempo real via endpoint local de métricas
-- **Integração com Diagnostics** — aparece em **System → Diagnostics → Services** com botões Start/Stop/Restart
+- Interface MVC nativa em **Services → Cloudflare Tunnel**
+- Autenticação por token de túnel gerenciado (Cloudflare Zero Trust)
+- Binário fornecido pelo pacote `cloudflared` do repositório do OPNsense (`PLUGIN_DEPENDS`), com o rc.d do próprio pacote
+- Token entregue ao processo via variável de ambiente `TUNNEL_TOKEN` (não aparece nos argumentos do processo)
+- Opções geradas em `/usr/local/etc/cloudflared/config.yml`: protocolo (auto/QUIC/HTTP2), criptografia pós-quântica, desativar QUIC PMTU discovery, versão de IP do edge, nível de log
+- `no-autoupdate` sempre ativo — atualizações chegam pelo pacote
+- Logs no syslog-ng, visíveis em **Services → Cloudflare Tunnel → Log File**
+- Integração com **System → Diagnostics → Services**
+- Reinício do serviço em mudança de IP da WAN (`newwanip`)
+- Sincronização de configuração em HA (XMLRPC)
 
-## Ambiente de Testes
+## Desenvolvimento
 
-| Componente | Versão |
-|------------|--------|
-| OPNsense   | 26.1.6-amd64 |
-| FreeBSD    | 14.3-RELEASE-p10 |
-| cloudflared | 2026.3.0 (kjake fork) |
-
-## Instalação
-
-### Pré-requisito (uma única vez)
+### Pré-requisitos (uma única vez)
 
 ```sh
 opnsense-code plugins
+pkg install cloudflared
 ```
 
-### Instalar para desenvolvimento
+> `make install` não resolve dependências; o pacote `cloudflared` precisa ser instalado manualmente.
+
+### Instalar a partir deste repositório
+
+O diretório `/usr/plugins/net/cloudflared` já existe na árvore oficial, então clone em um diretório separado no mesmo nível (o `Makefile` inclui `../../Mk/plugins.mk`):
 
 ```sh
-mkdir -p /usr/plugins/net/
 cd /usr/plugins/net/
-git clone https://github.com/AlanMartines/os-cloudflared cloudflared
-cd cloudflared
+git clone https://github.com/AlanMartines/os-cloudflared cloudflared-dev
+cd cloudflared-dev
 make install
 service configd restart
-rm -rf /usr/local/opnsense/mvc/app/cache/*
-rm -f /tmp/opnsense_menu_cache.xml
 ```
 
-> Faça logout e login no OPNsense para o menu aparecer.
+Faça logout e login no OPNsense para o menu aparecer.
 
-### Gerar pacote distribuível
+### Gerar pacote
 
 ```sh
-cd /usr/plugins/net/cloudflared
+cd /usr/plugins/net/cloudflared-dev
 make package
-# Saída: /usr/ports/packages/All/os-cloudflared-*.txz
 ```
 
-## Como Usar
+### Propor mudanças ao oficial
 
-### 1. Obtenha o Token
+1. Faça um fork de [opnsense/plugins](https://github.com/opnsense/plugins).
+2. Copie as alterações deste repositório para `net/cloudflared/` no fork (somente `Makefile`, `pkg-descr` e `src/`).
+3. Incremente `PLUGIN_REVISION` (correções) ou `PLUGIN_VERSION` (funcionalidades) no `Makefile`.
+4. Rode `make style` e `make lint` na árvore de plugins.
+5. Abra o PR com título no formato `net/cloudflared: descrição`.
 
-1. Acesse [Cloudflare Zero Trust](https://one.dash.cloudflare.com/)
-2. Navegue em **Networks → Tunnels**
-3. Crie ou selecione um túnel → **Configure** → copie o token
+## Como usar
 
-### 2. Configure o Plugin
+1. Em [Cloudflare Zero Trust](https://one.dash.cloudflare.com/), vá em **Networks → Tunnels**, crie ou selecione um túnel e copie o token.
+2. No OPNsense, acesse **Services → Cloudflare Tunnel**.
+3. Marque **Enable**, cole o token em **Tunnel Token** e clique em **Apply**.
+4. Opções avançadas (protocolo, pós-quântico, PMTU, versão de IP) ficam visíveis ao ativar o modo avançado do formulário.
 
-1. No OPNsense, acesse **Services → Cloudflare Tunnel**
-2. Clique em **Install/Update Binary** para baixar o `cloudflared`
-3. Cole o token em **Tunnel Token** (use o olho para visualizar)
-4. Marque **Enable**
-5. Configure as opções conforme necessário:
-   - **Disable Auto-Update** — recomendado
-   - **Enable Post-Quantum Encryption** — opcional
-6. Clique em **Apply**
-
-O serviço inicia automaticamente. A barra inferior exibe:
-- **Executando** (verde) — processo ativo
-- **Túnel: Saudável** (verde) — tunnel conectado ao Cloudflare
-- **Túnel: Conectando** (laranja) — processo iniciado, aguardando conexão
-
-### 3. Verificar
+Verificação:
 
 ```sh
-# Status do serviço
 service cloudflared status
-
-# Logs em tempo real
-tail -f /var/log/cloudflared.log
-
-# Health check local do tunnel
-fetch -qo - http://localhost:2000/healthcheck
+cat /usr/local/etc/cloudflared/config.yml
 ```
 
-No **Cloudflare Dashboard**: Networks → Tunnels → o túnel deve aparecer como **Healthy**.
+No dashboard da Cloudflare, o túnel deve aparecer como **Healthy**.
 
-## O que o Apply faz
+## Migração a partir da versão 0.4.0 deste repositório
 
-Ao clicar em **Apply**, o plugin executa automaticamente na sequência:
-
-1. Salva as configurações no modelo XML
-2. Cria os diretórios necessários (se não existirem)
-3. Regenera os arquivos de configuração a partir dos templates
-4. Define `chmod 600` no arquivo de token
-5. Aplica os tunables de sysctl (`kern.ipc.maxsockbuf`, `net.inet.udp.recvspace`)
-6. Reinicia o serviço cloudflared
-
-## OPNsense / FreeBSD QUIC stability tuning
-
-Se os logs exibirem intermitentemente:
-- `failed to accept QUIC stream: timeout: no recent network activity`
-- `failed to accept QUIC stream: Application error 0x0 (remote)`
-
-você pode melhorar a estabilidade aumentando os buffers de socket UDP e desabilitando o QUIC PMTU discovery.
-
-Comandos em tempo de execução:
+A versão 0.4.0 instalava um binário próprio (fork kjake) e um rc.d próprio **nos mesmos caminhos** usados pelo pacote `cloudflared`. Remova-os antes de instalar o pacote:
 
 ```sh
-sysctl kern.ipc.maxsockbuf=16777216
-sysctl net.inet.udp.recvspace=8388608
-sysrc cloudflared_mode='tunnel --no-autoupdate --quic-disable-pmtu-discovery run'
-service cloudflared restart
-```
-
-Para persistir após reboot no OPNsense:
-- **System → Settings → Tunables**
-- Adicione ou atualize:
-  - `kern.ipc.maxsockbuf = 16777216`
-  - `net.inet.udp.recvspace = 8388608`
-
-> **Notas:**
-> - Erros esporádicos `Application error 0x0 (remote)` ainda podem ocorrer e por si só não comprovam corrupção de pacotes.
-> - `--quic-disable-pmtu-discovery` deve aparecer antes de `run`.
-
-## Desinstalação
-
-```sh
-# Para o serviço
 service cloudflared stop
 
-# Desinstala o plugin
-cd /usr/plugins/net/cloudflared
-make deinstall
+# Arquivos da 0.4.0 que conflitam com o pacote cloudflared
+rm -f /usr/local/bin/cloudflared
+rm -f /usr/local/etc/rc.d/cloudflared
 
-# Remove arquivos gerados
-rm -f /etc/rc.conf.d/cloudflared
+# Arquivos da 0.4.0 que não são mais usados
+rm -f /usr/local/etc/cloudflared/token
 rm -f /usr/local/etc/sysctl.conf.d/cloudflared.conf
 rm -f /var/log/cloudflared.log
-rm -f /var/run/cloudflared.pid
-rm -f /usr/local/bin/cloudflared
-rm -rf /usr/local/etc/cloudflared
+rm -f /usr/local/opnsense/mvc/app/languages/*/cloudflared*
+rm -rf /usr/local/opnsense/scripts/OPNsense/Cloudflared
 
-# Reinicia configd e limpa cache
-service configd restart
-rm -rf /usr/local/opnsense/mvc/app/cache/*
-rm -f /tmp/opnsense_menu_cache.xml
+pkg install cloudflared
 ```
 
-## Arquivos Gerados
+Depois instale o plugin (oficial ou deste repositório) e clique em **Apply** na página do plugin.
 
-| Arquivo | Descrição |
-|---------|-----------|
-| `/etc/rc.conf.d/cloudflared` | Configuração RC (enable + mode) |
-| `/usr/local/etc/cloudflared/token` | Token do túnel (600) |
-| `/usr/local/etc/sysctl.conf.d/cloudflared.conf` | Tunables QUIC |
-| `/var/log/cloudflared.log` | Log do daemon |
-| `/var/run/cloudflared.pid` | PID do processo |
-| `/usr/local/bin/cloudflared` | Binário instalado |
+Configuração existente:
+
+- `enabled`, `token` e `post_quantum` são mantidos (mesmo ponto de montagem `//OPNsense/Cloudflared`).
+- `no_autoupdate`, `kern_ipc_maxsockbuf` e `net_inet_udp_recvspace` deixam de existir e são descartados no próximo salvamento.
+- Os sysctl aplicados pela 0.4.0 valem só até o próximo reboot. Para mantê-los, adicione em **System → Settings → Tunables**:
+  - `kern.ipc.maxsockbuf = 16777216`
+  - `net.inet.udp.recvspace = 8388608`
 
 ## Licença
 
@@ -175,5 +112,5 @@ BSD 2-Clause — mesma licença do OPNsense.
 
 ## Créditos
 
-- Guia de instalação: [hannoeru.me](https://hannoeru.me/posts/install-cloudflared-opnsense)
-- Binários FreeBSD: [kjake/cloudflared](https://github.com/kjake/cloudflared)
+- Plugin oficial: Richard Aspden e equipe OPNsense ([opnsense/plugins](https://github.com/opnsense/plugins/tree/master/net/cloudflared))
+- Trabalho original: Alan Martines
