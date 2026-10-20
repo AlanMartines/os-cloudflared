@@ -4,7 +4,7 @@ Plugin que integra o **Cloudflare Tunnel (cloudflared)** ao OPNsense, permitindo
 
 > **Este repositório é um espelho de desenvolvimento.** A versão oficial e mantida do plugin está em [opnsense/plugins › net/cloudflared](https://github.com/opnsense/plugins/tree/master/net/cloudflared) (mantenedor: Richard Aspden). Este repositório serve para testar mudanças e propor PRs ao oficial. Usuários finais devem instalar o plugin oficial pelo **System → Firmware → Plugins** (`os-cloudflared`).
 
-Sincronizado com o upstream no commit [`833b944`](https://github.com/opnsense/plugins/commit/833b94414ff01ddec22c4f9e3d84c5dd1e1cbdab) (versão 1.1_1).
+Baseado no upstream no commit [`833b944`](https://github.com/opnsense/plugins/commit/833b94414ff01ddec22c4f9e3d84c5dd1e1cbdab) (versão 1.1_1), com correções ainda em validação listadas no [CHANGELOG](CHANGELOG.md).
 
 ## Funcionalidades
 
@@ -12,9 +12,10 @@ Sincronizado com o upstream no commit [`833b944`](https://github.com/opnsense/pl
 - Autenticação por token de túnel gerenciado (Cloudflare Zero Trust)
 - Binário fornecido pelo pacote `cloudflared` do repositório do OPNsense (`PLUGIN_DEPENDS`), com o rc.d do próprio pacote
 - Token entregue ao processo via variável de ambiente `TUNNEL_TOKEN` (não aparece nos argumentos do processo)
-- Opções geradas em `/usr/local/etc/cloudflared/config.yml`: protocolo (auto/QUIC/HTTP2), criptografia pós-quântica, desativar QUIC PMTU discovery, versão de IP do edge, nível de log
+- Opções geradas em `/usr/local/etc/cloudflared/config.yml`: protocolo (auto/QUIC/HTTP2), criptografia pós-quântica, desativar QUIC PMTU discovery, versão de IP do edge (padrão IPv4, IPv6 ou Auto), endereço de métricas, nível de log
+- Status de conexão do túnel na página (conexões ativas com o edge da Cloudflare)
 - `no-autoupdate` sempre ativo — atualizações chegam pelo pacote
-- Logs no syslog-ng, visíveis em **Services → Cloudflare Tunnel → Log File**
+- Logs enviados ao syslog-ng (`/var/log/cloudflared/`, com rotação), visíveis em **Services → Cloudflare Tunnel → Log File**
 - Integração com **System → Diagnostics → Services**
 - Reinício do serviço em mudança de IP da WAN (`newwanip`)
 - Sincronização de configuração em HA (XMLRPC)
@@ -71,9 +72,11 @@ Verificação:
 ```sh
 service cloudflared status
 cat /usr/local/etc/cloudflared/config.yml
+configctl cloudflared tunnel_status
+tail -f /var/log/cloudflared/latest.log
 ```
 
-No dashboard da Cloudflare, o túnel deve aparecer como **Healthy**.
+Na página do plugin, **Tunnel Status** deve mostrar **Connected**. No dashboard da Cloudflare, o túnel deve aparecer como **Healthy**.
 
 ## Migração a partir da versão 0.4.0 deste repositório
 

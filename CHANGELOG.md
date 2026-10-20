@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## Em validação (ainda não enviado ao upstream)
+_Base: upstream `833b944`. Cada item é um commit independente, a ser validado na VM e enviado como PR separado ao opnsense/plugins._
+
+| Item | Commit | Validado na VM |
+|---|---|---|
+| Token aceita `+` e `/` (base64 padrão) | `net/cloudflared: allow + and / in tunnel token` | ☐ |
+| Token obrigatório só com o serviço ativado | `net/cloudflared: only require tunnel token when enabled` | ☐ |
+| Pós-quântico com HTTP/2 recusado na validação | `net/cloudflared: reject post-quantum with HTTP/2` | ☐ |
+| Gancho `newwanip` não inicia o serviço desativado | `net/cloudflared: skip newwanip start when disabled` | ☐ |
+| Versão de IP do edge: padrão IPv4 rotulado corretamente, opção Auto, valor no `config.yml` | `net/cloudflared: fix edge IP version default and add auto` | ☐ |
+| Endereço de métricas configurável (padrão `localhost:2000`, vazio = porta livre) | `net/cloudflared: make metrics address configurable` | ☐ |
+| Status de conexão do túnel na página (endpoint `/ready`) | `net/cloudflared: show tunnel connection status` | ☐ |
+| Saída do daemon enviada ao syslog, com rotação do syslog-ng | `net/cloudflared: send daemon output to syslog` | ☐ |
+
+Fora do plugin: reinício automático do processo depende de alterar o rc.d do port `net/cloudflared` (`daemon -r -P`).
+
+---
+
 ## 1.1_1 (2026-10-20) — alinhamento com o upstream
 _Espelho de [opnsense/plugins › net/cloudflared](https://github.com/opnsense/plugins/tree/master/net/cloudflared) no commit `833b944`._
 
