@@ -1,4 +1,6 @@
-metrics: localhost:2000
+{% if not helpers.empty('OPNsense.Cloudflared.general.metrics_address') %}
+metrics: "{{ OPNsense.Cloudflared.general.metrics_address }}"
+{% endif %}
 no-autoupdate: true
 {% if helpers.exists('OPNsense.Cloudflared.general.post_quantum') and OPNsense.Cloudflared.general.post_quantum == '1' %}
 post-quantum: true

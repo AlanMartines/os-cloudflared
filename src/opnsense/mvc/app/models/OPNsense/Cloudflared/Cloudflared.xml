@@ -37,6 +37,11 @@
                     <auto value="auto">Auto</auto>
                 </OptionValues>
             </edge_ip_version>
+            <metrics_address type="TextField">
+                <Default>localhost:2000</Default>
+                <Mask>/^([a-zA-Z0-9\.\-]+|\[[0-9a-fA-F:]+\]):[0-9]{1,5}$/</Mask>
+                <ValidationMessage>Enter the metrics address as host:port, e.g. localhost:2000.</ValidationMessage>
+            </metrics_address>
             <log_level type="OptionField">
                 <Default>info</Default>
                 <Required>Y</Required>
