@@ -42,7 +42,7 @@
         <label>Edge IP Version</label>
         <type>dropdown</type>
         <advanced>true</advanced>
-        <help>Force the IP version used to connect to Cloudflare's edge. Leave on Auto unless you need to restrict to IPv4 or IPv6.</help>
+        <help>IP version used to connect to Cloudflare's edge. cloudflared uses IPv4 by default; select Auto to use the IP version available on the system, or IPv6 to connect over IPv6 only.</help>
     </field>
     <field>
         <id>cloudflared.general.log_level</id>

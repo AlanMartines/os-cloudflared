@@ -12,3 +12,6 @@ protocol: {{ OPNsense.Cloudflared.general.protocol }}
 {% if helpers.exists('OPNsense.Cloudflared.general.log_level') and OPNsense.Cloudflared.general.log_level != 'info' %}
 loglevel: {{ OPNsense.Cloudflared.general.log_level }}
 {% endif %}
+{% if not helpers.empty('OPNsense.Cloudflared.general.edge_ip_version') %}
+edge-ip-version: "{{ OPNsense.Cloudflared.general.edge_ip_version }}"
+{% endif %}
