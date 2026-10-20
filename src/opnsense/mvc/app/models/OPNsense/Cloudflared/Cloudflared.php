@@ -29,7 +29,27 @@
 namespace OPNsense\Cloudflared;
 
 use OPNsense\Base\BaseModel;
+use OPNsense\Base\Messages\Message;
 
 class Cloudflared extends BaseModel
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function performValidation($validateFullModel = false)
+    {
+        $messages = parent::performValidation($validateFullModel);
+
+        if (
+            ($validateFullModel || $this->general->enabled->isFieldChanged() || $this->general->token->isFieldChanged()) &&
+            !$this->general->enabled->isEmpty() && $this->general->token->isEmpty()
+        ) {
+            $messages->appendMessage(new Message(
+                gettext('A tunnel token is required when the service is enabled.'),
+                $this->general->token->__reference
+            ));
+        }
+
+        return $messages;
+    }
 }
