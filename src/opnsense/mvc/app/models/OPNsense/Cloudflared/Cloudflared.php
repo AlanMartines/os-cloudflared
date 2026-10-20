@@ -50,6 +50,16 @@ class Cloudflared extends BaseModel
             ));
         }
 
+        if (
+            ($validateFullModel || $this->general->post_quantum->isFieldChanged() || $this->general->protocol->isFieldChanged()) &&
+            !$this->general->post_quantum->isEmpty() && (string)$this->general->protocol == 'http2'
+        ) {
+            $messages->appendMessage(new Message(
+                gettext('Post-quantum encryption requires the QUIC protocol.'),
+                $this->general->protocol->__reference
+            ));
+        }
+
         return $messages;
     }
 }
