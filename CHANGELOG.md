@@ -11,7 +11,7 @@ _Base: upstream `833b944`. Cada item é um commit independente, a ser validado n
 | Gancho `newwanip` não inicia o serviço desativado | `net/cloudflared: skip newwanip start when disabled` | ✅ 2026-10-20 |
 | Versão de IP do edge: padrão IPv4 rotulado corretamente, opção Auto, valor no `config.yml` | `net/cloudflared: fix edge IP version default and add auto` | ✅ 2026-10-20 |
 | Endereço de métricas configurável (padrão `localhost:2000`, vazio = porta livre) | `net/cloudflared: make metrics address configurable` | ✅ 2026-10-20 |
-| Status de conexão do túnel na página (endpoint `/ready`) | `net/cloudflared: show tunnel connection status` | ☐ |
+| Status de conexão do túnel na página (endpoint `/ready`) | `net/cloudflared: show tunnel connection status` | ✅ 2026-10-20 |
 | Saída do daemon enviada ao syslog, com rotação do syslog-ng | `net/cloudflared: send daemon output to syslog` | ✅ 2026-10-20 |
 
 Fora do plugin: reinício automático do processo depende de alterar o rc.d do port `net/cloudflared` (`daemon -r -P`).
