@@ -73,7 +73,7 @@ Verificação:
 service cloudflared status
 cat /usr/local/etc/cloudflared/config.yml
 configctl cloudflared tunnel_status
-tail -f /var/log/cloudflared/latest.log
+tail -f /var/log/cloudflared/cloudflared_$(date +%Y%m%d).log
 ```
 
 Na página do plugin, **Tunnel Status** deve mostrar **Connected**. No dashboard da Cloudflare, o túnel deve aparecer como **Healthy**.
