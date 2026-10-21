@@ -1,5 +1,9 @@
 # OPNsense Plugin: os-cloudflared (repositório de desenvolvimento)
 
+<p align="center">
+  <img src="/os-cloudflared.png" alt="Cloudflared" width="400">
+</p>
+
 Plugin que integra o **Cloudflare Tunnel (cloudflared)** ao OPNsense, permitindo expor serviços internos via Cloudflare Zero Trust sem abrir portas no firewall nem depender de IP público.
 
 > **Este repositório é um espelho de desenvolvimento.** A versão oficial e mantida do plugin está em [opnsense/plugins › net/cloudflared](https://github.com/opnsense/plugins/tree/master/net/cloudflared) (mantenedor: Richard Aspden). Este repositório serve para testar mudanças e propor PRs ao oficial. Usuários finais devem instalar o plugin oficial pelo **System → Firmware → Plugins** (`os-cloudflared`).
