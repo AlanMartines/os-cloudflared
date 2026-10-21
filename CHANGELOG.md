@@ -5,14 +5,14 @@ _Base: upstream `833b944`. Cada item é um commit independente, a ser validado n
 
 | Item | Commit | Validado na VM |
 |---|---|---|
-| Token aceita `+` e `/` (base64 padrão) | `net/cloudflared: allow + and / in tunnel token` | ☐ |
-| Token obrigatório só com o serviço ativado | `net/cloudflared: only require tunnel token when enabled` | ☐ |
-| Pós-quântico com HTTP/2 recusado na validação | `net/cloudflared: reject post-quantum with HTTP/2` | ☐ |
+| Token aceita `+` e `/` (base64 padrão) | `net/cloudflared: allow + and / in tunnel token` | ✅ 2026-10-20 |
+| Token obrigatório só com o serviço ativado | `net/cloudflared: only require tunnel token when enabled` | ✅ 2026-10-20 |
+| Pós-quântico com HTTP/2 recusado na validação | `net/cloudflared: reject post-quantum with HTTP/2` | ✅ 2026-10-20 |
 | Gancho `newwanip` não inicia o serviço desativado | `net/cloudflared: skip newwanip start when disabled` | ☐ |
 | Versão de IP do edge: padrão IPv4 rotulado corretamente, opção Auto, valor no `config.yml` | `net/cloudflared: fix edge IP version default and add auto` | ☐ |
 | Endereço de métricas configurável (padrão `localhost:2000`, vazio = porta livre) | `net/cloudflared: make metrics address configurable` | ☐ |
 | Status de conexão do túnel na página (endpoint `/ready`) | `net/cloudflared: show tunnel connection status` | ☐ |
-| Saída do daemon enviada ao syslog, com rotação do syslog-ng | `net/cloudflared: send daemon output to syslog` | ☐ |
+| Saída do daemon enviada ao syslog, com rotação do syslog-ng | `net/cloudflared: send daemon output to syslog` | ✅ 2026-10-20 |
 
 Fora do plugin: reinício automático do processo depende de alterar o rc.d do port `net/cloudflared` (`daemon -r -P`).
 
